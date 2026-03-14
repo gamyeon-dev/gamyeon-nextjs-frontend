@@ -87,7 +87,14 @@ export function useInterview() {
 
   const handleNext = useCallback(async () => {
     const questionIndex = currentQuestionRef.current
-    await stopRecording()
+    // await stopRecording()
+    const blob = (await stopRecording()) as Blob
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `interview_q${questionIndex + 1}.webm`
+    a.click()
+    URL.revokeObjectURL(url)
     if (questionIndex < QUESTIONS.length - 1) {
       setPhase('transition')
       setTimeout(() => {

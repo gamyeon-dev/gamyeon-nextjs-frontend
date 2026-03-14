@@ -84,67 +84,68 @@ export function InterviewSetupModal({ session, isResume = false }: InterviewSetu
   const allDone = doneCount === 4
 
   const handleDocumentConfirm = async () => {
-    if (!interviewId || !resume) return
+    // if (!interviewId || !resume) return
 
-    try {
-      setIsUploading(true)
-      const uploadTargets: Array<{ file: File | null; type: InterviewFileType }> = [
-        { file: resume, type: 'RESUME' },
-        { file: portfolio, type: 'PORTFOLIO' },
-        { file: coverLetter, type: 'COVER_LETTER' },
-      ]
-      const uploadedFiles: Array<{
-        fileType: InterviewFileType
-        originalFileName: string
-        fileKey: string
-        fileUrl: string
-      }> = []
+    // try {
+    //   setIsUploading(true)
+    //   const uploadTargets: Array<{ file: File | null; type: InterviewFileType }> = [
+    //     { file: resume, type: 'RESUME' },
+    //     { file: portfolio, type: 'PORTFOLIO' },
+    //     { file: coverLetter, type: 'COVER_LETTER' },
+    //   ]
+    //   const uploadedFiles: Array<{
+    //     fileType: InterviewFileType
+    //     originalFileName: string
+    //     fileKey: string
+    //     fileUrl: string
+    //   }> = []
 
-      for (const target of uploadTargets) {
-        if (!target.file) continue
+    //   for (const target of uploadTargets) {
+    //     if (!target.file) continue
 
-        const urlRes = await issuePresignedUrlAction(interviewId, {
-          fileType: target.type,
-          originalFileName: target.file.name,
-          fileSizeBytes: target.file.size,
-          contentType: 'application/pdf',
-        })
+    //     const urlRes = await issuePresignedUrlAction(interviewId, {
+    //       fileType: target.type,
+    //       originalFileName: target.file.name,
+    //       fileSizeBytes: target.file.size,
+    //       contentType: 'application/pdf',
+    //     })
 
-        if (!urlRes.success || !urlRes.data) {
-          throw new Error(`${target.type} presigned URL 발급 실패`)
-        }
+    //     if (!urlRes.success || !urlRes.data) {
+    //       throw new Error(`${target.type} presigned URL 발급 실패`)
+    //     }
 
-        const { presignedUrl, fileType, originalFileName, fileKey, fileUrl } = urlRes.data
-        const s3Res = await uploadFileToS3(target.file, presignedUrl)
+    //     const { presignedUrl, fileType, originalFileName, fileKey, fileUrl } = urlRes.data
+    //     const s3Res = await uploadFileToS3(target.file, presignedUrl)
 
-        if (!s3Res.success) {
-          throw new Error(`${target.type} S3 업로드 실패`)
-        }
+    //     if (!s3Res.success) {
+    //       throw new Error(`${target.type} S3 업로드 실패`)
+    //     }
 
-        uploadedFiles.push({
-          fileType,
-          originalFileName,
-          fileKey,
-          fileUrl,
-        })
-      }
+    //     uploadedFiles.push({
+    //       fileType,
+    //       originalFileName,
+    //       fileKey,
+    //       fileUrl,
+    //     })
+    //   }
 
-      if (uploadedFiles.length === 0) {
-        throw new Error('업로드할 파일이 없습니다.')
-      }
+    //   if (uploadedFiles.length === 0) {
+    //     throw new Error('업로드할 파일이 없습니다.')
+    //   }
 
-      const finalRes = await completeFileUploadAction(interviewId, { files: uploadedFiles })
-      if (!finalRes.success) {
-        throw new Error(finalRes.message || '파일 업로드 완료 처리 실패')
-      }
+    //   const finalRes = await completeFileUploadAction(interviewId, { files: uploadedFiles })
+    //   if (!finalRes.success) {
+    //     throw new Error(finalRes.message || '파일 업로드 완료 처리 실패')
+    //   }
 
-      completeStep(2)
-      generateInterviewQuestionAction(interviewId).catch((err) => console.error(err))
-    } catch (error) {
-      console.error('문서 업로드 중 오류:', error)
-    } finally {
-      setIsUploading(false)
-    }
+    //   completeStep(2)
+    //   generateInterviewQuestionAction(interviewId).catch((err) => console.error(err))
+    // } catch (error) {
+    //   console.error('문서 업로드 중 오류:', error)
+    // } finally {
+    //   setIsUploading(false)
+    // }
+    completeStep(2)
   }
 
   const completeStep = (step: number) => {
@@ -165,14 +166,14 @@ export function InterviewSetupModal({ session, isResume = false }: InterviewSetu
   }
 
   const syncInterviewTitle = async () => {
-    if (!interviewId) return
-    const nextTitle = title.trim()
-    if (!nextTitle) return
+    // if (!interviewId) return
+    // const nextTitle = title.trim()
+    // if (!nextTitle) return
 
-    const result = await updateInterviewTitleAction(interviewId, nextTitle)
-    if (!result.success) {
-      console.error('면접 제목 수정 실패:', result.message)
-    }
+    // const result = await updateInterviewTitleAction(interviewId, nextTitle)
+    // if (!result.success) {
+    //   console.error('면접 제목 수정 실패:', result.message)
+    // }
   }
 
   const navigateToStep = (step: number) => {
@@ -191,16 +192,17 @@ export function InterviewSetupModal({ session, isResume = false }: InterviewSetu
   }
 
   const handleTitleConfirm = async () => {
-    if (!title.trim()) return
-    const result = await createInterviewAction(title)
-    if (result.success) {
-      if (result.data) {
-        setInterviewId(result.data.intvId)
-      }
-      completeStep(1)
-    } else {
-      console.log(result.message)
-    }
+    // if (!title.trim()) return
+    // const result = await createInterviewAction(title)
+    // if (result.success) {
+    //   if (result.data) {
+    //     setInterviewId(result.data.intvId)
+    //   }
+    //   completeStep(1)
+    // } else {
+    //   console.log(result.message)
+    // }
+    completeStep(1)
   }
 
   const handleCameraConfirm = () => {
@@ -240,6 +242,7 @@ export function InterviewSetupModal({ session, isResume = false }: InterviewSetu
             faceDetected={camera.faceDetected}
             onRequest={camera.requestCamera}
             onConfirm={handleCameraConfirm}
+            onSkip={() => completeStep(3)}
           />
         )
       case 4:
@@ -250,6 +253,7 @@ export function InterviewSetupModal({ session, isResume = false }: InterviewSetu
             onRequest={micPerm.requestMic}
             onConfirm={handleMicConfirm}
             onRetry={() => micPerm.setMicStatus('idle')}
+            onSkip={() => completeStep(4)}
             recordingStatus={micRec.recordingStatus}
             isPlaying={micRec.isPlaying}
             recordedDuration={micRec.recordedDuration}
@@ -315,23 +319,21 @@ export function InterviewSetupModal({ session, isResume = false }: InterviewSetu
                 취소
               </Button>
               <Button
-                disabled={
-                  !allDone || !camera.cameraStream || (!isResume && (!title.trim() || !resume))
-                }
+                disabled={!allDone}
                 onClick={async () => {
-                  if (!camera.cameraStream) {
-                    console.error('카메라 스트림이 아직 준비되지 않았습니다.')
-                    return
-                  }
+                  // if (!camera.cameraStream) {
+                  //   console.error('카메라 스트림이 아직 준비되지 않았습니다.')
+                  //   return
+                  // }
 
-                  if (interviewId) {
-                    await startInterviewAction(interviewId)
-                  }
+                  // if (interviewId) {
+                  //   await startInterviewAction(interviewId)
+                  // }
 
                   session.handleSetupComplete({
                     title: title.trim() || '모의 면접',
                     basePose: camera.basePose,
-                    stream: camera.cameraStream,
+                    stream: camera.cameraStream!,
                   })
                 }}
                 className="gap-2"

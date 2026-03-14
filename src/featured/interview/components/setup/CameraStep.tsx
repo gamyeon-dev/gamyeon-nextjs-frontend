@@ -12,6 +12,7 @@ interface CameraStepProps {
   faceDetected: boolean
   onRequest: () => void
   onConfirm: () => void
+  onSkip: () => void
 }
 
 export function CameraStep({
@@ -23,6 +24,7 @@ export function CameraStep({
   faceDetected,
   onRequest,
   onConfirm,
+  onSkip,
 }: CameraStepProps) {
   return (
     <div className="space-y-5">
@@ -30,7 +32,12 @@ export function CameraStep({
         <div className="bg-primary/10 mb-3 flex h-12 w-12 items-center justify-center rounded-2xl">
           <Video className="text-primary h-6 w-6" />
         </div>
-        <h3 className="text-lg font-bold">카메라 권한 요청 및 테스트</h3>
+        <div className="flex items-center justify-between">
+          <h3 className="text-lg font-bold">카메라 권한 요청 및 테스트</h3>
+          <Button variant="ghost" size="sm" className="text-muted-foreground" onClick={onSkip}>
+            건너뛰기
+          </Button>
+        </div>
         <p className="text-muted-foreground mt-1 text-sm">
           면접 영상 녹화를 위해 카메라 접근 권한이 필요합니다.
         </p>

@@ -20,6 +20,7 @@ interface MicStepProps {
   onRequest: () => void
   onConfirm: () => void
   onRetry: () => void
+  onSkip: () => void
   recordingStatus: RecordingStatus
   isPlaying: boolean
   recordedDuration: number
@@ -49,6 +50,7 @@ export function MicStep({
   onRequest,
   onConfirm,
   onRetry,
+  onSkip,
   recordingStatus,
   isPlaying,
   recordedDuration,
@@ -63,7 +65,12 @@ export function MicStep({
         <div className="bg-primary/10 mb-3 flex h-12 w-12 items-center justify-center rounded-2xl">
           <Mic className="text-primary h-6 w-6" />
         </div>
-        <h3 className="text-lg font-bold">마이크 권한 요청 및 테스트</h3>
+        <div className="flex items-center justify-between">
+          <h3 className="text-lg font-bold">마이크 권한 요청 및 테스트</h3>
+          <Button variant="ghost" size="sm" className="text-muted-foreground" onClick={onSkip}>
+            건너뛰기
+          </Button>
+        </div>
         <p className="text-muted-foreground mt-1 text-sm">
           답변 인식을 위해 마이크 접근 권한이 필요합니다.
         </p>
